@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Guid>6a691dc2-5226-468d-9b88-87c8d040e9a2</Guid>
+    <Name>Simple Tactical UI Cleaner</Name>
+    <Description>Filters weapons shown in your soldier's slots based on their XComClassData settings.</Description>
+    <SteamPublishID>0</SteamPublishID>
+    <AssemblyName>SimpleTacticalUICleaner</AssemblyName>
+    <RootNamespace>SimpleTacticalUICleaner</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="ReadMe.txt" />
+    <Content Include="ModPreview.jpg" />
+    <Content Include="Config\XComEditor.ini" />
+    <Content Include="Config\XComEngine.ini" />
+    <Content Include="Config\XComGame.ini" />
+    <Content Include="Config\XComGameData.ini" />
+    <Content Include="Src\SimpleTacticalUICleaner\Classes\X2DownloadableContentInfo_SimpleTacticalUICleaner.uc" />
+    <Content Include="Src\SimpleTacticalUICleaner\Classes\UIArmory_Loadout_Cleaner.uc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Config" />
+    <Folder Include="Src" />
+    <Folder Include="Src\SimpleTacticalUICleaner" />
+    <Folder Include="Src\SimpleTacticalUICleaner\Classes" />
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+</Project>
