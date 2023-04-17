@@ -6,6 +6,27 @@
 
 class UIArmory_Loadout_Cleaner extends UIArmory_Loadout;
 
+simulated function bool ClassMatch(X2WeaponTemplate WeaponTemplate, EInventorySlot SelectedSlot)
+{
+	//local X2ItemTemplate ItemTemplate;
+	local XComGameState_Unit UpdatedUnit;
+	local X2SoldierClassTemplate SoldierClassName, AllowedSoldierClassTemplate;
+	//local X2WeaponTemplate WeaponTemplate;
+
+	//ItemTemplate = Item.GetMyTemplate();
+	UpdatedUnit =  GetUnit();
+	SoldierClassName = UpdatedUnit.GetSoldierClassTemplate();
+	AllowedSoldierClassTemplate = class'UIUtilities_Strategy'.static.GetAllowedClassForWeapon(WeaponTemplate);
+	`log("ClassMatch running on" @ WeaponTemplate.DataName @ "AllowedSoldierClass equals" @ AllowedSoldierClassTemplate.DisplayName,,'Simple Tac UI Cleaner');
+
+	if(SoldierClassName == AllowedSoldierClassTemplate && SoldierClassName.IsWeaponAllowedByClass(WeaponTemplate))
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 simulated function bool ShowInLockerList(XComGameState_Item Item, EInventorySlot SelectedSlot)
 {
 	local X2ItemTemplate ItemTemplate;
@@ -18,16 +39,17 @@ simulated function bool ShowInLockerList(XComGameState_Item Item, EInventorySlot
 	ItemTemplate = Item.GetMyTemplate();
 	UpdatedUnit =  GetUnit();
 	SoldierClassName = UpdatedUnit.GetSoldierClassTemplate();
-	`log("ShowInLockerList triggered for class" @ SoldierClassName.DisplayName,,'Simple Tac UI Cleaner');
+	`log("ShowInLockerList triggered for class" @ SoldierClassName.DisplayName,,'Simple Tac UI Cleaner',,'Simple Tac UI Cleaner');
 	
-		if(MeetsAllStrategyRequirements(ItemTemplate.ArmoryDisplayRequirements) && MeetsDisplayRequirement(ItemTemplate))
+	if(MeetsAllStrategyRequirements(ItemTemplate.ArmoryDisplayRequirements) && MeetsDisplayRequirement(ItemTemplate))
 	{
-		`log("ShowInLockerList running on" @ ItemTemplate.DataName,,'Simple Tac UI Cleaner');
+		`log("ShowInLockerList running on" @ ItemTemplate.DataName @ "IsWeaponAllowedByClass equals" @ SoldierClassName.IsWeaponAllowedByClass(X2WeaponTemplate(ItemTemplate)),,'Simple Tac UI Cleaner');
 		switch(SelectedSlot)
 		{
 		case eInvSlot_PrimaryWeapon:
 			WeaponTemplate = X2WeaponTemplate(ItemTemplate);
-			return (WeaponTemplate != none && SoldierClassName != none && SoldierClassName.IsWeaponAllowedByClass(WeaponTemplate) && WeaponTemplate.InventorySlot == SelectedSlot);
+			return (WeaponTemplate != none && /*SoldierClassName != none && SoldierClassName.IsWeaponAllowedByClass(WeaponTemplate)*/ClassMatch(WeaponTemplate,SelectedSlot) != false && WeaponTemplate.InventorySlot == SelectedSlot);
+			break;
 		case eInvSlot_SecondaryWeapon:
 			WeaponTemplate = X2WeaponTemplate(ItemTemplate);
 			return (WeaponTemplate != none && SoldierClassName != none && SoldierClassName.IsWeaponAllowedByClass(WeaponTemplate) && WeaponTemplate.InventorySlot == SelectedSlot);
@@ -44,5 +66,4 @@ simulated function bool ShowInLockerList(XComGameState_Item Item, EInventorySlot
 	}
 
 	return false;
-	
 }
